@@ -1,0 +1,17 @@
+import express from "express";
+import "dotenv/config";
+import connectDB from "./config/db.js";
+import authRouter from "./routes/authRoutes.js";
+import cookieParser from "cookie-parser";
+
+const app = express();
+const port = process.env.PORT;
+app.use(express.json());
+app.use(cookieParser());
+
+app.use("/api", authRouter);
+
+app.listen(port, () => {
+  connectDB();
+  console.log(`Server is listening on ${port}`);
+});
