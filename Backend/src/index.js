@@ -18,10 +18,6 @@ app.use(
 
 app.use("/api", authRouter);
 
-app.get("/", (req, res) => {
-  res.send("Backend connected successfully!");
-});
-
 app.listen(port, () => {
   connectDB();
   console.log(`Server is listening on ${port}`);
