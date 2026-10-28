@@ -1,41 +1,91 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import profile_icon from "../assets/images/profile_icon.png";
+import { dataContext } from "../context/UserContext";
+import axios from "axios";
 
 const SignUp = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userName, setUsername] = useState("");
+
+  const { serverURL } = useContext(dataContext);
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      let data = await axios.post(
+        serverURL + "/api/signup",
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          userName,
+        },
+        { withCredentials: true },
+      );
+
+      console.log(data);
+    } catch (error) {
+      console.log("Error:", error.response?.data);
+      console.log("Status:", error.response?.status);
+    }
+  };
+
   return (
     <div className="bg-[#009578] w-full h-screen flex justify-center items-center">
       <div className="card max-w-82.5 h-[65%] bg-white/80 py-2 px-4 rounded-lg">
         <h1 className="text-2xl font-semibold text-center ">SignUp</h1>
-        <form className="text-sm mt-10 flex flex-col gap-2">
+        <form
+          onSubmit={handleSignUp}
+          className="text-sm mt-10 flex flex-col gap-2"
+        >
           <div className="w-14 h-14 mb-2 border border-gray-600 rounded-full mx-auto  flex justify-center items-center cursor-pointer">
             <img src={profile_icon} alt="" className="w-9 h-9" />
           </div>
           <div className="flex justify-between items-center w-full">
             <input
+              required
               type="text"
               placeholder="First Name"
               className="border border-gray-500 px-2 py-1.5 outline-none rounded-sm w-[48%]"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             />
             <input
+              required
               type="text"
               placeholder="Last Name"
               className="border border-gray-500 px-2 py-1.5 outline-none rounded-sm w-[48%]"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
             />
           </div>
           <input
-            type="text"
+            required
+            type="email"
             placeholder="Email"
             className="border border-gray-500 px-2 py-1.5 outline-none rounded-sm"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            type="text"
+            required
+            type="password"
             placeholder="Password"
             className="border border-gray-500 px-2 py-1.5 outline-none rounded-sm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <input
+            required
             type="text"
             placeholder="Username"
             className="border border-gray-500 px-2 py-1.5 outline-none rounded-sm"
+            value={userName}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <button className="bg-[#009578] px-2 py-2 text-white font-medium text-[16px] rounded-sm cursor-pointer outline-none mt-5">
             Sign Up
