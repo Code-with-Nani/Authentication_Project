@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const dataContext = createContext();
 
 const UserContext = ({ children }) => {
-  const serverURL = "http://localhost:3000";
+  const serverURL = import.meta.env.VITE_API_URL;
 
   const [userData, setUserData] = useState(null);
 
