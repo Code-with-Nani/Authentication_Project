@@ -18,7 +18,8 @@ const SignUp = () => {
   const [frontendImg, setFrontendImg] = useState(profile_icon);
   const [backendImg, setBackendImg] = useState(null);
 
-  const { serverURL } = useContext(dataContext);
+  const { serverURL, userData, setUserData, getUserData } =
+    useContext(dataContext);
 
   const formData = new FormData();
   formData.append("firstName", firstName);
@@ -38,7 +39,11 @@ const SignUp = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log(data);
+      await getUserData();
+
+      setUserData(data.data.user);
+
+      navigate("/");
     } catch (error) {
       console.log("Error:", error.response?.data);
       console.log("Status:", error.response?.status);

@@ -9,7 +9,8 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { serverURL } = useContext(dataContext);
+  const { serverURL, userData, setUserData, getUserData } =
+    useContext(dataContext);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -23,7 +24,10 @@ const LogIn = () => {
         { withCredentials: true },
       );
 
-      console.log(data);
+      await getUserData();
+      setUserData(data.data.user);
+
+      navigate("/");
     } catch (error) {
       console.log("Error:", error.response?.data);
       console.log("Status:", error.response?.status);
