@@ -1,6 +1,7 @@
 import Users from "../models/users_model.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../config/token.js";
+import uploadImgOnCloudinary from "../config/clodinary.js";
 
 export const signup = async (req, res) => {
   try {
@@ -8,6 +9,11 @@ export const signup = async (req, res) => {
 
     if (!firstName || !lastName || !email || !password || !userName) {
       return res.status(400).json({ message: "Send all inputs" });
+    }
+
+    let profileImage;
+    if (req.file) {
+      profileImage = await uploadImgOnCloudinary(req.file.path);
     }
 
     const existUser = await Users.findOne({ email });
@@ -24,6 +30,7 @@ export const signup = async (req, res) => {
       email,
       password: hashedPassword,
       userName,
+      profileImage,
     });
 
     const token = generateToken(user._id);
@@ -81,7 +88,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token");
-    
+
     return res.status(200).json({ message: "Logout successfully" });
   } catch (error) {
     return res.status(500).json(error);

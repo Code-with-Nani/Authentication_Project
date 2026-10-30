@@ -15,22 +15,28 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [userName, setUsername] = useState("");
 
+  const [frontendImg, setFrontendImg] = useState(profile_icon);
+  const [backendImg, setBackendImg] = useState(null);
+
   const { serverURL } = useContext(dataContext);
+
+  const formData = new FormData();
+  formData.append("firstName", firstName);
+  formData.append("lastName", lastName);
+  formData.append("email", email);
+  formData.append("password", password);
+  formData.append("userName", userName);
+  if (backendImg) {
+    formData.append("profileImage", backendImg);
+  }
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      let data = await axios.post(
-        serverURL + "/api/signup",
-        {
-          firstName,
-          lastName,
-          email,
-          password,
-          userName,
-        },
-        { withCredentials: true },
-      );
+      let data = await axios.post(serverURL + "/api/signup", formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log(data);
     } catch (error) {
@@ -38,9 +44,6 @@ const SignUp = () => {
       console.log("Status:", error.response?.status);
     }
   };
-
-  const [frontendImg, setFrontendImg] = useState(profile_icon);
-  const [backendImg, setBackendImg] = useState(null);
 
   const handleImg = (e) => {
     let file = e.target.files[0];
